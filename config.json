@@ -8,6 +8,16 @@
     }, {
       "url": "https://github.com/hoxxep/Snarl",
       "path": "/Users/liam/Documents/Projects/Snarl"
+    }, {
+      "url": "https://github.com/user/repo",
+      "path": "/home/user/path/to/local/repo",
+      "secret": "privatesecret",
+      "deploy": {
+        "event": "command",
+        "push": "git pull",
+        "event2": "sh deploy.sh",
+        "something": "python3 tests.py"
+      }
     }
   ]
 }

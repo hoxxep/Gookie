@@ -1,5 +1,5 @@
 /**
- * Node GitHub AutoDeploy
+ * GitHub Webhook Server
  * Created by Liam Gray (@hoxxep)
  * Released under the MIT License.
  */
@@ -15,6 +15,12 @@ var VERBOSE = true;
 var repos;
 
 function main() {
+    /**
+     * Load config and start serving
+     * TODO: verbose/quiet command line args
+     * TODO: add support for multiple events
+     * TODO: add special thing for ping event
+     */
     var config = loadConfig();
     server(config.port);
 }
@@ -23,6 +29,7 @@ function loadConfig() {
     /**
      * Load users settings and add defaults
      * @type {{port: number, repositories: Array}}
+     * @return config merged with defaults
      */
 
     var defaults = {
@@ -56,8 +63,8 @@ function merge(object1, object2) {
      * @type {{}}
      * @return object1 overwritten by object2
      */
-    var object3 = {};
-    var attr;
+    var attr,
+        object3 = {};
     for (attr in object1) {object3[attr] = object1[attr]}
     for (attr in object2) {object3[attr] = object2[attr]}
     return object3;
@@ -66,6 +73,7 @@ function merge(object1, object2) {
 function server(port) {
     /**
      * Start listening for webhook
+     * TODO: stop server from sending errors to client
      * @param port: port to start AutoDeploy server on
      */
     app.use(bodyParser.json({extended: false}));
@@ -128,12 +136,12 @@ function deploy(directory, command) {
      * @param command: deploy command to run
      */
     command = 'cd "' + directory + '" && ' + command;
+    if (VERBOSE) console.log(timePrefix() + command);
     exec(command, function(error, stdout, stderr) {
-        if (VERBOSE) console.log('----' + timePrefix() + command + ' ----');
         if (VERBOSE && stdout) console.log(stdout);
         if (stderr) console.log(stderr);
         if (error) console.log(error);
-        if (VERBOSE) console.log('----- end of deploy output ------');
+        if (VERBOSE) console.log(timePrefix() + 'end of deploy output');
     });
 }
 

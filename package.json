@@ -1,5 +1,5 @@
 {
-  "name": "GitHub-AutoDeploy-Node",
+  "name": "GitHub-Webhook-Server",
   "version": "1.0.0",
   "dependencies": {
     "body-parser": "^1.10.1",
