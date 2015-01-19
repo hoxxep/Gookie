@@ -8,11 +8,13 @@ Inspired by [GitHub Auto Deploy](https://github.com/logsol/Github-Auto-Deploy) w
 Getting Started
 ---------------
 
-1. Download Gookie or clone the repo.
+1. Download Gookie or clone the repo (`git clone https://github.com/hoxxep/Gookie`).
 2. Edit `config.json` by setting the port for your webhook and configuring a repository.
-3. Test your Gookie server is running by visiting your ip:port in a browser.
+3. Run `npm install` to install local dependencies.
+4. Run `node Gookie.js` to start the server.
+5. Test your Gookie server is running by visiting your ip:port in a browser.
     - **Troubleshooting:** you may have to open ports if your router/firewall is restricting your chosen port. You can use [ngrok](https://ngrok.com/) as a temporary solution.
-4. Configure your webhook by visiting your repo settings on GitHub.
+6. Configure your webhook by visiting your repo settings on GitHub.
     - Enter the url of your machine and the port, and specify content type as application/json.
 
 Configuration
