@@ -2,12 +2,12 @@
   "port": 8001,
   "repositories": [
     {
-      "url": "https://github.com/hoxxep/GitHubAutoDeploy",
-      "path": "~/Documents/Projects/GitHubAutoDeploy",
+      "url": "https://github.com/hoxxep/Gookie",
+      "path": "~/Documents/Projects/Gookie",
       "deploy": "sh pull-and-build.sh"
     }, {
       "url": "https://github.com/hoxxep/Snarl",
-      "path": "/Users/liam/Documents/Projects/Snarl"
+      "path": "~/Documents/Projects/Snarl"
     }, {
       "url": "https://github.com/user/repo",
       "path": "/home/user/path/to/local/repo",
@@ -15,7 +15,7 @@
       "deploy": {
         "event": "command",
         "push": "git pull",
-        "event2": "sh deploy.sh",
+        "not": "supported yet!",
         "something": "python3 tests.py"
       }
     }

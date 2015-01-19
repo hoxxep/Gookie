@@ -1,5 +1,6 @@
 /**
- * GitHub Webhook Server
+ * Gookie
+ * Lightweight & configurable GitHub Webhook Server
  * Created by Liam Gray (@hoxxep)
  * Released under the MIT License.
  */
@@ -38,8 +39,8 @@ function loadConfig() {
     };
 
     var repo_defaults = {
-        "url": "https://github.com/hoxxep/GitHubAutoDeploy",
-        "path": "~/Documents/Projects/GitHubAutoDeploy",
+        "url": "https://github.com/hoxxep/Gookie",
+        "path": "~/Documents/Projects/Gookie",
         "deploy": "git pull",
         "secret": ""
     };
@@ -72,16 +73,16 @@ function merge(object1, object2) {
 
 function server(port) {
     /**
-     * Start listening for webhook
+     * Start listening for hook
      * TODO: stop server from sending errors to client
-     * @param port: port to start AutoDeploy server on
+     * @param port: port to start Gookie server on
      */
     app.use(bodyParser.json({extended: false}));
 
     app.route('/')
         .get(function(req, res) {
-            console.log(timePrefix() + 'ERROR: GET requests not supported');
-            res.status(400).json({error: 'None shall pass.'}).end();
+            console.log(timePrefix() + 'GET request sent from ' + req.connection.remoteAddress);
+            res.status(400).send('<html><head><title>Gookie</title></head><body><h1>Your Gookie server is running.</h1></body></html>').end();
         })
         .post(function(req, res) {
             try {
