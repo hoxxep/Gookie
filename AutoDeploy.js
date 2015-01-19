@@ -57,8 +57,9 @@ function merge(object1, object2) {
      * @return object1 overwritten by object2
      */
     var object3 = {};
-    for (var attr in object1) {object3[attr] = object1[attr]}
-    for (var attr in object2) {object3[attr] = object2[attr]}
+    var attr;
+    for (attr in object1) {object3[attr] = object1[attr]}
+    for (attr in object2) {object3[attr] = object2[attr]}
     return object3;
 }
 
@@ -67,7 +68,7 @@ function server(port) {
      * Start listening for webhook
      * @param port: port to start AutoDeploy server on
      */
-    app.use(bodyParser.json({extended: true}));
+    app.use(bodyParser.json({extended: false}));
 
     app.route('/')
         .get(function(req, res) {
