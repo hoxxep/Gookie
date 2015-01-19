@@ -67,7 +67,7 @@ function server(port) {
      * Start listening for webhook
      * @param port: port to start AutoDeploy server on
      */
-    app.use(bodyParser({extended: true}));
+    app.use(bodyParser.json({extended: true}));
 
     app.route('/')
         .get(function(req, res) {
