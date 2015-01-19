@@ -1,0 +1,8 @@
+{
+  "name": "GitHub-AutoDeploy-Node",
+  "version": "1.0.0",
+  "dependencies": {
+    "body-parser": "^1.10.1",
+    "express": "^4.11.0"
+  }
+}
