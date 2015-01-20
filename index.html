@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Gookie : Lightweight, configurable GitHub webhook server.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Gookie</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/hoxxep/Gookie">View on GitHub</a>
+
+          <h1 id="project_title">Gookie</h1>
+          <h2 id="project_tagline">Lightweight, configurable GitHub webhook server.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/hoxxep/Gookie/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/hoxxep/Gookie/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="gookie" class="anchor" href="#gookie" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gookie</h1>
+
+<p>Small and highly configurable node server for handling your <a href="https://developer.github.com/webhooks/">GitHub Webhooks</a>.</p>
+
+<p>Inspired by <a href="https://github.com/logsol/Github-Auto-Deploy">GitHub Auto Deploy</a> which was written in Python and designed only for pull requests. GitHub Webhook Server is written in Node.js and is just as friendly; outputs deploy script output; and is more configurable. Was designed to solve one or two of the problems we ran into at the <a href="https://github.com/hoxxep/eth0-Hackathon">eth0 hackathon</a>, such as mentioning in the terminal that a ping event occurred and showing errors during git pull/our deploy script.</p>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<ol>
+<li>Download Gookie or clone the repo (<code>git clone https://github.com/hoxxep/Gookie</code>).</li>
+<li>Edit <code>config.json</code> by setting the port for your webhook and configuring a repository.</li>
+<li>Run <code>npm install</code> to install local dependencies.</li>
+<li>Run <code>node Gookie.js</code> to start the server.</li>
+<li>Test your Gookie server is running by visiting your ip:port in a browser.
+
+<ul>
+<li>
+<em>Troubleshooting:</em> you may have to open ports if your router/firewall is restricting your chosen port. You can use <a href="https://ngrok.com/">ngrok</a> as a temporary solution.</li>
+</ul>
+</li>
+<li>Configure your <a href="https://developer.github.com/webhooks/">webhook</a> by visiting your repo settings on GitHub.
+
+<ul>
+<li>Enter the url of your machine and the port, and specify content type as application/json.</li>
+</ul>
+</li>
+</ol>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>Example <code>config.json</code>:</p>
+
+<div class="highlight highlight-JSON"><pre>{
+  <span class="pl-s1"><span class="pl-pds">"</span>port<span class="pl-pds">"</span></span>: <span class="pl-c1">8001</span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>repositories<span class="pl-pds">"</span></span>: [
+    {
+      <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/hoxxep/Gookie<span class="pl-pds">"</span></span>,
+      <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~/Documents/Projects/Gookie<span class="pl-pds">"</span></span>,
+      <span class="pl-s1"><span class="pl-pds">"</span>deploy<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>sh pull-and-build.sh<span class="pl-pds">"</span></span>
+    }, {
+      <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/hoxxep/Snarl<span class="pl-pds">"</span></span>,
+      <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~/Documents/Projects/Snarl<span class="pl-pds">"</span></span>
+    }
+  ]
+}</pre></div>
+
+<p>If left blank, the <code>port</code> will default to 8001; and any repository options/properties which have been left out default to the following:</p>
+
+<div class="highlight highlight-JSON"><pre>{
+  <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/hoxxep/Gookie<span class="pl-pds">"</span></span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~/Documents/Projects/Gookie<span class="pl-pds">"</span></span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>deploy<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>git pull<span class="pl-pds">"</span></span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>secret<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+}</pre></div>
+
+<p>This means if you don't have a custom <code>deploy</code> script/command, it will default to <code>git pull</code>, and the secret will default to blank.</p>
+
+<h2>
+<a id="todos" class="anchor" href="#todos" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODOs</h2>
+
+<ul>
+<li>Include support for multiple webhooks on the same repo and different actions for each</li>
+<li>Quiet mode</li>
+<li>Add a custom terminal message for ping event</li>
+<li>Stop server sending errors to client</li>
+<li>Add support for repo/webhook secret</li>
+<li>Better parsing of github url (currently must have 'https://', no trailing slash and no www)</li>
+</ul>
+
+<hr>
+
+<p>Created by Liam Gray (<a href="https://github.com/hoxxep" class="user-mention">@hoxxep</a>).
+Released under the MIT License.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Gookie maintained by <a href="https://github.com/hoxxep">hoxxep</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
