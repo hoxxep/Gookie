@@ -82,7 +82,7 @@ function server(port) {
     app.route('/')
         .get(function(req, res) {
             console.log(timePrefix() + 'GET request sent from ' + req.connection.remoteAddress);
-            res.status(400).send('<html><head><title>Gookie</title></head><body><h1>Your Gookie server is running.</h1></body></html>').end();
+            res.status(204).send('<html><head><title>Gookie</title></head><body><h1>Your Gookie server is running.</h1></body></html>').end();
         })
         .post(function(req, res) {
             try {
