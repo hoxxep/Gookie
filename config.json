@@ -3,11 +3,11 @@
   "repositories": [
     {
       "url": "https://github.com/hoxxep/Gookie",
-      "path": "~/Documents/Projects/Gookie",
+      "path": "/Users/liam/Documents/Projects/Gookie",
       "deploy": "sh pull-and-build.sh"
     }, {
       "url": "https://github.com/hoxxep/Snarl",
-      "path": "~/Documents/Projects/Snarl"
+      "path": "/Users/liam/Documents/Projects/Snarl"
     }, {
       "url": "https://github.com/user/repo",
       "path": "/home/user/path/to/local/repo",

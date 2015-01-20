@@ -51,6 +51,26 @@ If left blank, the `port` will default to 8001; and any repository options/prope
 
 This means if you don't have a custom `deploy` script/command, it will default to `git pull`, and the secret will default to blank.
 
+Sample Output
+-------------
+
+Sample output which Gookie outputs to terminal window.
+
+1. Visited machine URL in browser.
+2. Pushed to repo [hoxxep/Snarl](https://github.com/hoxxep/Snarl)
+    - This then triggers the `cd "directory" && deploy` command
+    - Which then shows the output of `git pull`
+
+```shell
+ [02:33:02] Server started on port 8001
+ [02:35:08] GET request sent from 1.2.3.4
+ [02:33:15] user hoxxep pushed to https://github.com/hoxxep/Snarl
+ [02:33:15] cd "/Users/liam/Documents/Projects/Snarl" && git pull
+Already up-to-date.
+
+ [02:33:16] end of deploy output
+```
+
 TODOs
 -----
 
@@ -60,6 +80,7 @@ TODOs
 - Stop server sending errors to client
 - Add support for repo/webhook secret
 - Better parsing of github url (currently must have 'https://', no trailing slash and no www)
+- Daemon/service mode?
 
 ---
 
