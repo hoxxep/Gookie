@@ -1,8 +1,22 @@
 {
   "name": "Gookie",
   "version": "1.0.0",
+  "description": "Lightweight, configurable GitHub webhook server.",
+  "author": "Liam Gray <hoxxep@gmail.com>",
+  "scripts": {
+    "start": "node Gookie.js"
+  },
+  "main": "Gookie.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hoxxep/Gookie"
+  },
+  "bugs": {
+    "url": "https://github.com/hoxxep/Gookie/issues"
+  },
   "dependencies": {
     "body-parser": "^1.10.1",
     "express": "^4.11.0"
-  }
+  },
+  "license": "MIT"
 }
