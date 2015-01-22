@@ -20,6 +20,12 @@ Getting Started
 Configuration
 -------------
 
+### Command-line args
+
+`-q` or `--quiet`: Reduce the amount of output from Gookie. They still print deploy script output (in case an error occurs).
+
+### config.json
+
 Example `config.json`:
 
 ```JSON
@@ -54,7 +60,7 @@ This means if you don't have a custom `deploy` script/command, it will default t
 Sample Output
 -------------
 
-Sample output which Gookie outputs to terminal window.
+Sample output which Gookie outputs to terminal window after the following actions:
 
 1. Visited machine URL in browser.
 2. Pushed to repo [hoxxep/Snarl](https://github.com/hoxxep/Snarl)
@@ -75,9 +81,8 @@ TODOs
 -----
 
 - Include support for multiple webhooks on the same repo and different actions for each
-- Quiet mode
+- Optional logging?
 - Add a custom terminal message for ping event
-- Stop server sending errors to client
 - Add support for repo/webhook secret
 - Better parsing of github url (currently must have 'https://', no trailing slash and no www)
 - Daemon/service mode?

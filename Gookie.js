@@ -7,6 +7,7 @@
 
 var exec = require('child_process').exec,
     bodyParser = require('body-parser'),
+    methodOverride = require('method-override'),
     express = require('express'),
     app = express();
 
@@ -21,11 +22,13 @@ function main() {
      * TODO: add support for multiple events
      * TODO: add special thing for ping event
      */
+
     process.argv.forEach(function (val, index, array) {
         if (val === '-q' || val === '--quiet') {
             VERBOSE = false;
         }
     });
+
     var config = loadConfig();
     server(config.port);
 }
@@ -78,10 +81,16 @@ function merge(object1, object2) {
 function server(port) {
     /**
      * Start listening for hook
-     * TODO: stop server from sending errors to client
      * @param port: port to start Gookie server on
      */
     app.use(bodyParser.json({extended: false}));
+    app.use(methodOverride());
+
+    // error function
+    app.use(function(err, req, res, next) {
+        console.log(timePrefix() + 'Error occured: ' + err);
+        res.status(500).send('Bad request').end();
+    });
 
     app.route('/')
         .get(function(req, res) {
