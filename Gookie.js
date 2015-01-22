@@ -49,7 +49,8 @@ function loadConfig() {
         "url": "https://github.com/hoxxep/Gookie",
         "path": "~/Documents/Projects/Gookie",
         "deploy": "git pull",
-        "secret": ""
+        "secret": "",
+        "parsed": {}
     };
 
     var config = require('./config.json');
@@ -57,7 +58,10 @@ function loadConfig() {
 
     repos = {};
     for (var repo in config['repositories']) {
-        repos[config['repositories'][repo].url] = merge(repo_defaults, config['repositories'][repo]);
+        var r = config['repositories'][repo];
+        r.url = formatUrl(r.url);
+        console.log(r.url);
+        repos[r.url] = merge(repo_defaults, r);
     }
 
     return defaults;
@@ -99,6 +103,7 @@ function server(port) {
         })
         .post(function(req, res) {
             try {
+                req.body.repository.url = formatUrl(req.body.repository.url);
                 validateRequest(req.body);
 
                 if (VERBOSE) console.log(timePrefix() + 'user ' + req.body.pusher.name + ' pushed to ' + req.body.repository.url);
@@ -121,7 +126,6 @@ function validateRequest(json) {
     /**
      * Validate GitHub JSON by checking repo matches etc.
      * TODO: support for secret
-     * TODO: better parsing of GitHub url
      * @param json: decoded JSON request body
      * @throws error when invalid JSON
      */
@@ -176,6 +180,19 @@ function timePrefix() {
     sec = (sec < 10 ? "0" : "") + sec;
 
     return ' [' + hour + ':' + min + ':' + sec + '] ';
+}
+
+function formatUrl(url) {
+    /**
+     * Get user and repo name from url
+     * @param url: url in string format
+     * @type String
+     * @return formatted github url like: https://github.com/user/repo
+     */
+    var pattern = /https?:\/\/(?:www\.)?github\.com\/([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)\/?/
+    var match = url.match(pattern);
+    if (match.length < 3) throw 'Invalid repo URL ' + url;
+    return 'https://github.com/' + match[1].toLowerCase() + '/' + match[2].toLowerCase();
 }
 
 main();

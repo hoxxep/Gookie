@@ -84,7 +84,6 @@ TODOs
 - Optional logging?
 - Add a custom terminal message for ping event
 - Add support for repo/webhook secret
-- Better parsing of github url (currently must have 'https://', no trailing slash and no www)
 - Daemon/service mode?
 
 ---
