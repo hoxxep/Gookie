@@ -129,6 +129,7 @@ function validateRequest(json) {
      * @param json: decoded JSON request body
      * @throws error when invalid JSON
      */
+
     if (!json.hasOwnProperty('repository') || !json.repository.hasOwnProperty('url')) {
         throw 'ERROR: invalid JSON!';
     }
@@ -189,8 +190,7 @@ function formatUrl(url) {
      * @type String
      * @return formatted github url like: https://github.com/user/repo
      */
-    var pattern = /https?:\/\/(?:www\.)?github\.com\/([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)\/?/
-    var match = url.match(pattern);
+    var match = url.match(/https?:\/\/(?:www\.)?github\.com\/([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)\/?/);
     if (match.length < 3) throw 'Invalid repo URL ' + url;
     return 'https://github.com/' + match[1].toLowerCase() + '/' + match[2].toLowerCase();
 }

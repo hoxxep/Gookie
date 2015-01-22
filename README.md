@@ -81,7 +81,8 @@ TODOs
 -----
 
 - Include support for multiple webhooks on the same repo and different actions for each
-- Optional logging?
+    - Would require unique urls for each hook/event as GitHub doesn't send what the event was in the payload. Will need to look at a neat way to do this in Express.js
+- Optional logging
 - Add a custom terminal message for ping event
 - Add support for repo/webhook secret
 - Daemon/service mode?
