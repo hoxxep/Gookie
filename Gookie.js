@@ -18,10 +18,14 @@ var repos;
 function main() {
     /**
      * Load config and start serving
-     * TODO: verbose/quiet command line args
      * TODO: add support for multiple events
      * TODO: add special thing for ping event
      */
+    process.argv.forEach(function (val, index, array) {
+        if (val === '-q' || val === '--quiet') {
+            VERBOSE = false;
+        }
+    });
     var config = loadConfig();
     server(config.port);
 }
