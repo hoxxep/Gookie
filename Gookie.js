@@ -6,13 +6,28 @@
  */
 
 var exec = require('child_process').exec,
+    winston = require('winston'),
+    logger = new (winston.Logger)({
+        transports: [
+            new (winston.transports.Console)({
+                name: 'console',
+                json: false,
+                colorize: true,
+                level: 'info'
+            }),
+            new (winston.transports.File)({
+                name: 'file',
+                filename: 'gookie.log',
+                timestamp: false,
+                json: false,
+                level: 'info'
+            })
+        ]
+    }),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     express = require('express'),
     app = express();
-
-// Logging levels
-var VERBOSE = true;
 
 var repos;
 
@@ -25,7 +40,10 @@ function main() {
 
     process.argv.forEach(function (val, index, array) {
         if (val === '-q' || val === '--quiet') {
-            VERBOSE = false;
+            logger.transports.console.level = 'warn';
+        } else if (val === '-v' || val === '--verbose') {
+            logger.transports.console.level = 'verbose';
+            logger.transports.file.level = 'verbose';
         }
     });
 
@@ -60,7 +78,6 @@ function loadConfig() {
     for (var repo in config['repositories']) {
         var r = config['repositories'][repo];
         r.url = formatUrl(r.url);
-        console.log(r.url);
         repos[r.url] = merge(repo_defaults, r);
     }
 
@@ -92,13 +109,13 @@ function server(port) {
 
     // error function
     app.use(function(err, req, res, next) {
-        console.log(timePrefix() + 'Error occured: ' + err);
+        logger.error(timePrefix() + 'Error occured: ' + err);
         res.status(500).send('Bad request').end();
     });
 
     app.route('/')
         .get(function(req, res) {
-            console.log(timePrefix() + 'GET request sent from ' + req.connection.remoteAddress);
+            logger.info(timePrefix() + 'GET request sent from ' + req.connection.remoteAddress);
             res.status(200).send('<html><head><title>Gookie</title></head><body><h1>Your Gookie server is running.</h1></body></html>').end();
         })
         .post(function(req, res) {
@@ -106,11 +123,11 @@ function server(port) {
                 req.body.repository.url = formatUrl(req.body.repository.url);
                 validateRequest(req.body);
 
-                if (VERBOSE) console.log(timePrefix() + 'user ' + req.body.pusher.name + ' pushed to ' + req.body.repository.url);
+                logger.verbose(timePrefix() + 'user ' + req.body.pusher.name + ' pushed to ' + req.body.repository.url);
 
                 res.status(204).end();
             } catch (e) {
-                console.log(timePrefix() + e);
+                logger.error(timePrefix() + e);
                 res.status(400).send('Bad request.').end();
                 return;
             }
@@ -119,7 +136,7 @@ function server(port) {
         });
 
     app.listen(port);
-    if (VERBOSE) console.log(timePrefix() + 'Server started on port ' + port);
+    logger.info(timePrefix() + 'Server started on port ' + port);
 }
 
 function validateRequest(json) {
@@ -155,12 +172,12 @@ function deploy(directory, command) {
      * @param command: deploy command to run
      */
     command = 'cd "' + directory + '" && ' + command;
-    if (VERBOSE) console.log(timePrefix() + command);
+    logger.verbose(timePrefix() + command);
     exec(command, function(error, stdout, stderr) {
-        if (VERBOSE && stdout) console.log(stdout);
-        if (stderr) console.log(stderr);
-        if (error) console.log(error);
-        if (VERBOSE) console.log(timePrefix() + 'end of deploy output');
+        if (stdout) logger.info(timePrefix() + 'Deploying in ' + directory + '\n' + stdout);
+        if (stderr) logger.error(timePrefix() + 'Deploy error in ' + directory + '\n' + stderr);
+        if (error) logger.error(timePrefix() + 'Deploy error in ' + directory + '\n' + error);
+        logger.verbose(timePrefix() + 'end of deploy output');
     });
 }
 
