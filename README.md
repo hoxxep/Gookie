@@ -22,7 +22,8 @@ Configuration
 
 ### Command-line args
 
-`-q` or `--quiet`: Reduce the amount of output from Gookie. They still print deploy script output (in case an error occurs).
+`-q` or `--quiet`: Reduce the amount of [console] output from Gookie. They still print deploy script output (in case an error occurs).
+`-v` or `--verbose`: Show user pushing to which repo and some other extra output [in both gookie.log and console output].
 
 ### config.json
 
@@ -82,7 +83,6 @@ TODOs
 
 - Include support for multiple webhooks on the same repo and different actions for each
     - Would require unique urls for each hook/event as GitHub doesn't send what the event was in the payload. Will need to look at a neat way to do this in Express.js
-- Optional logging
 - Add a custom terminal message for ping event
 - Add support for repo/webhook secret
 - Daemon/service mode?
