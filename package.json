@@ -4,9 +4,9 @@
   "description": "Lightweight, configurable GitHub webhook server.",
   "author": "Liam Gray <hoxxep@gmail.com>",
   "scripts": {
-    "start": "node Gookie.js"
+    "start": "node gookie.js"
   },
-  "main": "Gookie.js",
+  "main": "gookie.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/hoxxep/Gookie"
