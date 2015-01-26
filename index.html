@@ -1,42 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Gookie : Lightweight, configurable GitHub webhook server.">
+    <title>Gookie by hoxxep</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Gookie</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
+    <div class="wrapper">
+      <header>
+        <h1>Gookie</h1>
+        <p>Lightweight, configurable GitHub webhook server.</p>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/hoxxep/Gookie">View on GitHub</a>
+        <p class="view"><a href="https://github.com/hoxxep/Gookie">View the Project on GitHub <small>hoxxep/Gookie</small></a></p>
 
-          <h1 id="project_title">Gookie</h1>
-          <h2 id="project_tagline">Lightweight, configurable GitHub webhook server.</h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/hoxxep/Gookie/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/hoxxep/Gookie/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
+        <ul>
+          <li><a href="https://github.com/hoxxep/Gookie/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/hoxxep/Gookie/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/hoxxep/Gookie">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
         <h1>
 <a id="gookie" class="anchor" href="#gookie" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gookie</h1>
 
 <p>Small and highly configurable node server for handling your <a href="https://developer.github.com/webhooks/">GitHub Webhooks</a>.</p>
 
-<p>Inspired by <a href="https://github.com/logsol/Github-Auto-Deploy">GitHub Auto Deploy</a> which was written in Python and designed only for pull requests. GitHub Webhook Server is written in Node.js and is just as friendly; outputs deploy script output; and is more configurable. Was designed to solve one or two of the problems we ran into at the <a href="https://github.com/hoxxep/eth0-Hackathon">eth0 hackathon</a>, such as mentioning in the terminal that a ping event occurred and showing errors during git pull/our deploy script.</p>
+<p>Inspired by <a href="https://github.com/logsol/Github-Auto-Deploy">GitHub Auto Deploy</a> which was written in Python and designed only for pull requests. Gookie is written in Node.js and is just as friendly; but it prints deploy script output and is more configurable. It was designed to solve one or two of the problems we ran into at the <a href="https://github.com/hoxxep/eth0-Hackathon">eth0 hackathon</a>, such as mentioning in the terminal that a ping event occurred and showing errors during git pull/our deploy script.</p>
 
 <h2>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
@@ -63,6 +60,15 @@
 
 <h2>
 <a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<h3>
+<a id="command-line-args" class="anchor" href="#command-line-args" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command-line args</h3>
+
+<p><code>-q</code> or <code>--quiet</code>: Reduce the amount of [console] output from Gookie. They still print deploy script output (in case an error occurs).
+<code>-v</code> or <code>--verbose</code>: Show user pushing to which repo and some other extra output [in both gookie.log and console output].</p>
+
+<h3>
+<a id="configjson" class="anchor" href="#configjson" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.json</h3>
 
 <p>Example <code>config.json</code>:</p>
 
@@ -92,15 +98,43 @@
 <p>This means if you don't have a custom <code>deploy</code> script/command, it will default to <code>git pull</code>, and the secret will default to blank.</p>
 
 <h2>
+<a id="sample-output" class="anchor" href="#sample-output" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sample Output</h2>
+
+<p>Sample output which Gookie outputs to terminal window after the following actions:</p>
+
+<ol>
+<li>Visited machine URL in browser.</li>
+<li>Pushed to repo <a href="https://github.com/hoxxep/Snarl">hoxxep/Snarl</a>
+
+<ul>
+<li>This then triggers the <code>cd "directory" &amp;&amp; deploy</code> command</li>
+<li>Which then shows the output of <code>git pull</code>
+</li>
+</ul>
+</li>
+</ol>
+
+<div class="highlight highlight-shell"><pre> [02:33:02] Server started on port 8001
+ [02:35:08] GET request sent from 1.2.3.4
+ [02:33:15] user hoxxep pushed to https://github.com/hoxxep/Snarl
+ [02:33:15] <span class="pl-s3">cd</span> <span class="pl-s1"><span class="pl-pds">"</span>/Users/liam/Documents/Projects/Snarl<span class="pl-pds">"</span></span> <span class="pl-k">&amp;&amp;</span> git pull
+Already up-to-date.
+
+ [02:33:16] end of deploy output</pre></div>
+
+<h2>
 <a id="todos" class="anchor" href="#todos" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODOs</h2>
 
 <ul>
-<li>Include support for multiple webhooks on the same repo and different actions for each</li>
-<li>Quiet mode</li>
+<li>Include support for multiple webhooks on the same repo and different actions for each
+
+<ul>
+<li>Would require unique urls for each hook/event as GitHub doesn't send what the event was in the payload. Will need to look at a neat way to do this in Express.js</li>
+</ul>
+</li>
 <li>Add a custom terminal message for ping event</li>
-<li>Stop server sending errors to client</li>
 <li>Add support for repo/webhook secret</li>
-<li>Better parsing of github url (currently must have 'https://', no trailing slash and no www)</li>
+<li>Daemon/service mode?</li>
 </ul>
 
 <hr>
@@ -108,17 +142,12 @@
 <p>Created by Liam Gray (<a href="https://github.com/hoxxep" class="user-mention">@hoxxep</a>).
 Released under the MIT License.</p>
       </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Gookie maintained by <a href="https://github.com/hoxxep">hoxxep</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/hoxxep">hoxxep</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
-
+    <script src="javascripts/scale.fix.js"></script>
     
-
   </body>
 </html>
