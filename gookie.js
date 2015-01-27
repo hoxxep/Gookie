@@ -6,28 +6,13 @@
  */
 
 var exec = require('child_process').exec,
+    path = require('path'),
     winston = require('winston'),
-    logger = new (winston.Logger)({
-        transports: [
-            new (winston.transports.Console)({
-                name: 'console',
-                json: false,
-                colorize: true,
-                level: 'info'
-            }),
-            new (winston.transports.File)({
-                name: 'file',
-                filename: 'gookie.log',
-                timestamp: false,
-                json: false,
-                level: 'info'
-            })
-        ]
-    }),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     express = require('express'),
-    app = express();
+    app = express(),
+    logger;
 
 var repos;
 
@@ -38,6 +23,8 @@ function main() {
      * TODO: add special thing for ping event
      */
 
+    var config = loadConfig();
+
     process.argv.forEach(function (val, index, array) {
         if (val === '-q' || val === '--quiet') {
             logger.transports.console.level = 'warn';
@@ -47,8 +34,7 @@ function main() {
         }
     });
 
-    var config = loadConfig();
-    server(config.port);
+    if (config.repositories) server(config.port);
 }
 
 function loadConfig() {
@@ -60,15 +46,17 @@ function loadConfig() {
 
     var defaults = {
         "port": 8001,
-        "repositories": []
-    };
-
-    var repo_defaults = {
-        "url": "https://github.com/hoxxep/Gookie",
-        "path": "~/Documents/Projects/Gookie",
-        "deploy": "git pull",
-        "secret": "",
-        "parsed": {}
+        "log": {
+            "directory": ""
+        },
+        "repositories": [
+            {
+                "url": "https://github.com/hoxxep/Gookie",
+                "path": "/home/user/Documents/Projects/Gookie",
+                "deploy": "git pull",
+                "secret": ""
+            }
+        ]
     };
 
     var config = require('./config.json');
@@ -78,10 +66,40 @@ function loadConfig() {
     for (var repo in config['repositories']) {
         var r = config['repositories'][repo];
         r.url = formatUrl(r.url);
-        repos[r.url] = merge(repo_defaults, r);
+        repos[r.url] = merge(defaults.repositories[0], r);
     }
 
+    logger = newLogger(config.log.directory, 'gookie.log');
+
     return defaults;
+}
+
+function newLogger(folder, logfile) {
+    /**
+     * Create Winston logger for specified filename and console
+     * @param filename: name of log to write to (excluding .log)
+     * @return a winston logger
+     */
+    var filename = folder ? path.join(folder, logfile) : logfile;
+
+    return new (winston.Logger)({
+        transports: [
+            new (winston.transports.Console)({
+                name: 'console',
+                json: false,
+                colorize: true,
+                level: 'info'
+            }),
+            new (winston.transports.File)({
+                name: 'file',
+                //datePattern: '.yyyy-MM-dd',
+                filename: filename,
+                timestamp: false,
+                json: false,
+                level: 'info'
+            })
+        ]
+    })
 }
 
 function merge(object1, object2) {
@@ -95,8 +113,37 @@ function merge(object1, object2) {
     var attr,
         object3 = {};
     for (attr in object1) {object3[attr] = object1[attr]}
-    for (attr in object2) {object3[attr] = object2[attr]}
+    for (attr in object2) {
+        if (attr in object1 && object2[attr] instanceof Array) {
+            object3[attr] = arrayMerge(object1[attr], object2[attr]);
+        } else if (attr in object1 && object2[attr] instanceof Object) {
+            object3[attr] = merge(object1[attr], object2[attr]);
+        } else {
+            object3[attr] = object2[attr];
+        }
+    }
     return object3;
+}
+
+function arrayMerge(array1, array2) {
+    /**
+     * For merging repository array
+     * @param array1: default array
+     * @param array1: customised array
+     * @type {Array}
+     * @return array2 after its sub-Arrays/Objects overwritten by array1[0]
+     */
+    var array3 = [];
+    for (elem in array2) {
+        if (elem instanceof Array) {
+            array3.concat(arrayMerge(array1[0], elem));
+        } else if (elem instanceof Object) {
+            array3.concat(merge(array1[0], elem));
+        } else {
+            array3.concat(elem);
+        }
+    }
+    return array3;
 }
 
 function server(port) {

@@ -1,5 +1,8 @@
 {
   "port": 8001,
+  "log": {
+    "directory": "logs"
+  },
   "repositories": [
     {
       "url": "https://github.com/hoxxep/Gookie",
@@ -13,9 +16,9 @@
       "path": "/home/user/path/to/local/repo",
       "secret": "privatesecret",
       "deploy": {
+        "not": "supported yet!",
         "event": "command",
         "push": "git pull",
-        "not": "supported yet!",
         "something": "python3 tests.py"
       }
     }

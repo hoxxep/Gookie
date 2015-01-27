@@ -22,8 +22,10 @@ Configuration
 
 ### Command-line args
 
-`-q` or `--quiet`: Reduce the amount of [console] output from Gookie. They still print deploy script output (in case an error occurs).
-`-v` or `--verbose`: Show user pushing to which repo and some other extra output [in both gookie.log and console output].
+- `-q` or `--quiet`: Reduce the amount of [console] output from Gookie. They still print deploy script output (in case
+ an error occurs).
+- `-v` or `--verbose`: Show user pushing to which repo and some other extra output [in both gookie.log and console
+output].
 
 ### config.json
 
@@ -32,6 +34,9 @@ Example `config.json`:
 ```JSON
 {
   "port": 8001,
+  "log": {
+    "directory": "logs"
+  },
   "repositories": [
     {
       "url": "https://github.com/hoxxep/Gookie",
@@ -45,7 +50,10 @@ Example `config.json`:
 }
 ```
 
-If left blank, the `port` will default to 8001; and any repository options/properties which have been left out default to the following:
+- `port`: if left blank will default to 8001.
+- `log`: if removed/directory is left blank will default to the running directory. Note: directory must already exist
+ or an error will be thrown.
+- `repository`: any repository options/properties which have been left out default to the following:
 
 ```JSON
 {
@@ -89,5 +97,4 @@ TODOs
 
 ---
 
-Created by Liam Gray (@hoxxep).
-Released under the MIT License.
+Created by Liam Gray (@hoxxep). Released under the MIT License.
