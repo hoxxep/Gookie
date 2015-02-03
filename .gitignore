@@ -6,3 +6,6 @@ node_modules/
 
 # WebStorm/Jetbrains IDEs
 .idea/
+
+# Personal config files
+config.json
