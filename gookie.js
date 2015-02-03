@@ -51,8 +51,8 @@ function loadConfig() {
         },
         "repositories": [
             {
-                "url": "https://github.com/hoxxep/Gookie",
-                "path": "/home/user/Documents/Projects/Gookie",
+                "url": "https://github.com/user/repo",
+                "path": "/home/user/local/git/repo",
                 "deploy": "git pull",
                 "secret": ""
             }

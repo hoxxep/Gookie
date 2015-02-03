@@ -1,0 +1,16 @@
+{
+  "port": 8001,
+  "log": {
+    "directory": "logs"
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/user/repo",
+      "path": "/home/user/repo",
+      "deploy": "git pull && sh build.sh"
+    }, {
+      "url": "https://github.com/user/repo2",
+      "path": "/home/user/repo2"
+    }
+  ]
+}
