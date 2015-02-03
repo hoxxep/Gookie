@@ -9,7 +9,7 @@ Getting Started
 ---------------
 
 1. Download Gookie or clone the repo (`git clone https://github.com/hoxxep/Gookie`).
-2. Copy `config-example.json` to `config.json` and then configure the port for your webhook and a github repository.
+2. Copy `config-example.json` to `config.json` and then configure the port for your [webhook](https://developer.github.com/webhooks/) and a github repository.
     - Also create or configure a logging directory too, and manually create the folder.
 3. Run `npm install` to install local dependencies.
 4. Run `node Gookie.js` to start the server.
