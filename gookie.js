@@ -112,11 +112,12 @@ function merge(object1, object2) {
      */
     var attr,
         object3 = {};
+
     for (attr in object1) {object3[attr] = object1[attr]}
     for (attr in object2) {
-        if (attr in object1 && object2[attr] instanceof Array) {
+        if (object1.hasOwnProperty(attr) && object2[attr] instanceof Array) {
             object3[attr] = arrayMerge(object1[attr], object2[attr]);
-        } else if (attr in object1 && object2[attr] instanceof Object) {
+        } else if (object1.hasOwnProperty(attr) && object2[attr] instanceof Object) {
             object3[attr] = merge(object1[attr], object2[attr]);
         } else {
             object3[attr] = object2[attr];
@@ -134,13 +135,13 @@ function arrayMerge(array1, array2) {
      * @return array2 after its sub-Arrays/Objects overwritten by array1[0]
      */
     var array3 = [];
-    for (elem in array2) {
-        if (elem instanceof Array) {
-            array3.concat(arrayMerge(array1[0], elem));
-        } else if (elem instanceof Object) {
-            array3.concat(merge(array1[0], elem));
+    for (var i=0; i<array2.length; i++) {
+        if (array2[i] instanceof Array) {
+            array3 = array3.concat(arrayMerge(array1[0], array2[i]));
+        } else if (array2[i] instanceof Object) {
+            array3 = array3.concat(merge(array1[0], array2[i]));
         } else {
-            array3.concat(elem);
+            array3 = array3.concat(array2[i]);
         }
     }
     return array3;
@@ -169,6 +170,12 @@ function server(port) {
             try {
                 req.body.repository.url = formatUrl(req.body.repository.url);
                 validateRequest(req.body);
+
+                if (req.body.hasOwnProperty('zen')) {
+                    logger.info('Ping event zen: ' + req.body['zen']);
+                    res.status(204).end();
+                    return;
+                }
 
                 logger.verbose(timePrefix() + 'user ' + req.body.pusher.name + ' pushed to ' + req.body.repository.url);
 
@@ -254,9 +261,12 @@ function formatUrl(url) {
      * @type String
      * @return formatted github url like: https://github.com/user/repo
      */
-    var match = url.match(/https?:\/\/(?:www\.)?github\.com\/([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)\/?/);
-    if (match.length < 3) throw 'Invalid repo URL ' + url;
-    return 'https://github.com/' + match[1].toLowerCase() + '/' + match[2].toLowerCase();
+    var match = url.match(/https?:\/\/(?:(?:www|api)\.)?github\.com\/(?:repos\/)?([a-zA-Z0-9\-]+)\/([a-zA-Z0-9\-]+)\/?/);
+    try {
+        return 'https://github.com/' + match[1].toLowerCase() + '/' + match[2].toLowerCase();
+    } catch (e) {
+        throw 'Invalid repo URL ' + url;
+    }
 }
 
 main();
