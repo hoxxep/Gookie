@@ -172,7 +172,7 @@ function server(port) {
                 validateRequest(req.body);
 
                 if (req.body.hasOwnProperty('zen')) {
-                    logger.info('Ping event zen: ' + req.body['zen']);
+                    logger.info('Ping event from ' + req.body.repository.url + ' with zen: ' + req.body['zen']);
                     res.status(204).end();
                     return;
                 }
