@@ -5,7 +5,7 @@ Small and highly configurable node server for handling your [GitHub Webhooks](ht
 
 Inspired by [GitHub Auto Deploy](https://github.com/logsol/Github-Auto-Deploy) which was written in Python and designed only for pull requests. Gookie is written in Node.js and is just as friendly; but it prints deploy script output and is more configurable. It was designed to solve one or two of the problems we ran into at the [eth0 hackathon](https://github.com/hoxxep/eth0-Hackathon), such as mentioning in the terminal that a ping event occurred and showing errors during git pull/our deploy script.
 
-To run Gookie in daemon mode, I recommend checking out [forever](https://www.npmjs.com/package/forever). A really sleek npm package for stopping/starting/running other npm scripts like services.
+To run Gookie as a service/daemon, I recommend checking out [forever](https://www.npmjs.com/package/forever). It's a really sleek npm package for stopping/starting/running other npm scripts like services.
 
 Getting Started
 ---------------
