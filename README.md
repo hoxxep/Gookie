@@ -38,16 +38,14 @@ Example `config.json`:
 {
   "port": 8001,
   "log": {
-    "directory": "logs"
+    "directory": ""
   },
   "repositories": [
     {
-      "url": "https://github.com/hoxxep/Gookie",
-      "path": "~/Documents/Projects/Gookie",
-      "deploy": "sh pull-and-build.sh"
-    }, {
-      "url": "https://github.com/hoxxep/Snarl",
-      "path": "~/Documents/Projects/Snarl"
+      "url": "https://github.com/user/repo",
+      "path": "/home/user/local/git/repo",
+      "deploy": "git pull",
+      "secret": ""
     }
   ]
 }
@@ -60,14 +58,21 @@ Example `config.json`:
 
 ```JSON
 {
-  "url": "https://github.com/hoxxep/Gookie",
-  "path": "~/Documents/Projects/Gookie",
+  "url": "https://github.com/user/repo",
+  "path": "/home/user/local/git/repo",
   "deploy": "git pull",
   "secret": ""
 }
 ```
 
-This means if you don't have a custom `deploy` script/command, it will default to `git pull`, and the secret will default to blank.
+This means if you don't specify a custom `deploy` script/command, it will default to `git pull`, and the `secret` will default to blank. For example, the following repo set up will use `git pull` as its deploy script and have no secret.
+
+```JSON
+{
+  "url": "https://github.com/you/repo",
+  "path": "/home/user/your/git/repo"
+}
+```
 
 Sample Output
 -------------
