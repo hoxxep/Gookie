@@ -8,6 +8,7 @@
 var exec = require('child_process').exec,
     path = require('path'),
     winston = require('winston'),
+    crypto = require('crypto'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     express = require('express'),
@@ -152,13 +153,58 @@ function server(port) {
      * Start listening for hook
      * @param port: port to start Gookie server on
      */
-    app.use(bodyParser.json({extended: false}));
+
     app.use(methodOverride());
 
     // error function
     app.use(function(err, req, res, next) {
         logger.error(timePrefix() + 'Error occured: ' + err);
         res.status(500).send('Bad request').end();
+    });
+
+    // Parse body as text (so we get raw JSON string for hashing)
+    app.use(bodyParser.text({type: 'application/json'})); //{extended: false}
+
+    // Secret + Parse/Validate JSON
+    app.use(function(req, res, next) {
+        var signature = req.headers.hasOwnProperty('x-hub-signature') ? req.headers['x-hub-signature'] : undefined;
+
+        req.rawBody = req.body;
+        var json = req.body = JSON.parse(req.body);
+        var repo = json.repository.url = formatUrl(json.repository.url);
+
+        try {
+            validateRequest(json);
+        } catch (e) {
+            throw 'Invalid JSON in request: ' + e;
+        }
+
+        var secret = repos[repo].secret;
+
+        if (secret) {
+            var signature_error = '';
+
+            if (signature && signature.length < 100) {
+                var shasum = crypto.createHmac('sha1', secret);
+                shasum.update(req.rawBody);
+                if ('sha1=' + shasum.digest('hex') === signature) {
+                    logger.verbose(timePrefix() + 'Signature valid on request for ' + repo);
+                    next();
+                } else {
+                    signature_error += 'Signature "' + signature + '" does not match digest "sha1=' + shasum.digest('hex') + '"! Double check secret on repo ' + repo + '. ';
+                }
+            } else {
+                signature_error += 'Signature invalid/missing. Secret most likely not configured on GitHub. ';
+            }
+
+            if (signature_error) {
+                logger.error(signature_error);
+                res.status('500').send('Bad Request').end();
+            }
+        } else {
+            logger.verbose(timePrefix() + 'No signature configured on repo ' + repo);
+            next();
+        }
     });
 
     app.route('/')
@@ -168,16 +214,13 @@ function server(port) {
         })
         .post(function(req, res) {
             try {
-                req.body.repository.url = formatUrl(req.body.repository.url);
-                validateRequest(req.body);
-
                 if (req.body.hasOwnProperty('zen')) {
                     logger.info('Ping event from ' + req.body.repository.url + ' with zen: ' + req.body['zen']);
                     res.status(204).end();
                     return;
                 }
 
-                logger.verbose(timePrefix() + 'user ' + req.body.pusher.name + ' pushed to ' + req.body.repository.url);
+                logger.verbose(timePrefix() + 'User ' + req.body.pusher.name + ' pushed to ' + req.body.repository.url);
 
                 res.status(204).end();
             } catch (e) {
@@ -226,12 +269,12 @@ function deploy(directory, command) {
      * @param command: deploy command to run
      */
     command = 'cd "' + directory + '" && ' + command;
-    logger.verbose(timePrefix() + command);
+    logger.verbose(timePrefix() + 'Running: ' + command);
     exec(command, function(error, stdout, stderr) {
         if (stdout) logger.info(timePrefix() + 'Deploying in ' + directory + '\n' + stdout);
         if (stderr) logger.error(timePrefix() + 'Deploy error in ' + directory + '\n' + stderr);
         if (error) logger.error(timePrefix() + 'Deploy error in ' + directory + '\n' + error);
-        logger.verbose(timePrefix() + 'end of deploy output');
+        logger.verbose(timePrefix() + 'End of deploy output');
     });
 }
 
