@@ -197,6 +197,7 @@ function server(port) {
                 signature_error += 'Signature invalid/missing. Secret most likely not configured on GitHub. ';
             }
 
+            // Note: error handling middleware doesn't catch throw error/next(error), hence the manual logging and response.
             if (signature_error) {
                 logger.error(signature_error);
                 res.status('400').send('Error 400: Bad Request.').end();
