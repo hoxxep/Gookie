@@ -10,7 +10,8 @@
       "deploy": "git pull && sh build.sh"
     }, {
       "url": "https://github.com/user/repo2",
-      "path": "/home/user/repo2"
+      "path": "/home/user/repo2",
+      "secret": "asl98rr98fh3we2f3lb54iauh"
     }
   ]
 }
