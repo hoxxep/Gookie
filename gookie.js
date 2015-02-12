@@ -159,7 +159,7 @@ function server(port) {
     // error function
     app.use(function(err, req, res, next) {
         logger.error(timePrefix() + 'Error occured: ' + err);
-        res.status(400).send('Bad request').end();
+        res.status(400).send('Error 400: Bad Request.').end();
     });
 
     // Parse body as text (so we get raw JSON string for hashing)
@@ -199,7 +199,7 @@ function server(port) {
 
             if (signature_error) {
                 logger.error(signature_error);
-                res.status('400').send('Bad Request').end();
+                res.status('400').send('Error 400: Bad Request.').end();
             }
         } else {
             logger.verbose(timePrefix() + 'No signature configured on repo ' + repo);
