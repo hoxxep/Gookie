@@ -97,9 +97,8 @@ Already up-to-date.
 TODOs
 -----
 
-- Include support for multiple webhooks on the same repo and different actions for each
-    - Would require unique urls for each hook/event as GitHub doesn't send what the event was in the payload. Will need to look at a neat way to do this in Express.js
-- Daemon/service mode? (User can currently work around using the npm module `forever` which is cleaner).
+- Include support for multiple webhooks on the same repo and different actions for each. This would require unique urls for each hook/event as GitHub doesn't send what the event was in the payload. Will need to look at a neat way to do this in Express.js.
+- Daemon/service mode? User can currently do a work around using the npm module `forever`, which might actually be cleaner than implementing daemon/service mode for Gookie on its own?
 
 ---
 
