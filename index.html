@@ -31,16 +31,23 @@
         <h1>
 <a id="gookie" class="anchor" href="#gookie" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gookie</h1>
 
-<p>Small and highly configurable node server for handling your <a href="https://developer.github.com/webhooks/">GitHub Webhooks</a>.</p>
+<p>Small and highly configurable node server for handling your <a href="https://developer.github.com/webhooks/">GitHub Webhooks</a> with support for GitHub/webhook secrets.</p>
 
 <p>Inspired by <a href="https://github.com/logsol/Github-Auto-Deploy">GitHub Auto Deploy</a> which was written in Python and designed only for pull requests. Gookie is written in Node.js and is just as friendly; but it prints deploy script output and is more configurable. It was designed to solve one or two of the problems we ran into at the <a href="https://github.com/hoxxep/eth0-Hackathon">eth0 hackathon</a>, such as mentioning in the terminal that a ping event occurred and showing errors during git pull/our deploy script.</p>
+
+<p>To run Gookie as a service/daemon, I recommend checking out <a href="https://www.npmjs.com/package/forever">forever</a>. It's a really sleek npm package for stopping/starting/running other npm scripts like services.</p>
 
 <h2>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
 
 <ol>
 <li>Download Gookie or clone the repo (<code>git clone https://github.com/hoxxep/Gookie</code>).</li>
-<li>Edit <code>config.json</code> by setting the port for your webhook and configuring a repository.</li>
+<li>Copy <code>config-example.json</code> to <code>config.json</code> and then configure the port for your <a href="https://developer.github.com/webhooks/">webhook</a> and a github repository.
+
+<ul>
+<li>Also create or configure a logging directory too, and manually create the folder.</li>
+</ul>
+</li>
 <li>Run <code>npm install</code> to install local dependencies.</li>
 <li>Run <code>node Gookie.js</code> to start the server.</li>
 <li>Test your Gookie server is running by visiting your ip:port in a browser.
@@ -64,8 +71,14 @@
 <h3>
 <a id="command-line-args" class="anchor" href="#command-line-args" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command-line args</h3>
 
-<p><code>-q</code> or <code>--quiet</code>: Reduce the amount of [console] output from Gookie. They still print deploy script output (in case an error occurs).
-<code>-v</code> or <code>--verbose</code>: Show user pushing to which repo and some other extra output [in both gookie.log and console output].</p>
+<ul>
+<li>
+<code>-q</code> or <code>--quiet</code>: Reduce the amount of [console] output from Gookie. They still print deploy script output (in case
+an error occurs).</li>
+<li>
+<code>-v</code> or <code>--verbose</code>: Show user pushing to which repo and some other extra output [in both gookie.log and console
+output].</li>
+</ul>
 
 <h3>
 <a id="configjson" class="anchor" href="#configjson" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.json</h3>
@@ -74,28 +87,42 @@
 
 <div class="highlight highlight-JSON"><pre>{
   <span class="pl-s1"><span class="pl-pds">"</span>port<span class="pl-pds">"</span></span>: <span class="pl-c1">8001</span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>log<span class="pl-pds">"</span></span>: {
+    <span class="pl-s1"><span class="pl-pds">"</span>directory<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+  },
   <span class="pl-s1"><span class="pl-pds">"</span>repositories<span class="pl-pds">"</span></span>: [
     {
-      <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/hoxxep/Gookie<span class="pl-pds">"</span></span>,
-      <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~/Documents/Projects/Gookie<span class="pl-pds">"</span></span>,
-      <span class="pl-s1"><span class="pl-pds">"</span>deploy<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>sh pull-and-build.sh<span class="pl-pds">"</span></span>
-    }, {
-      <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/hoxxep/Snarl<span class="pl-pds">"</span></span>,
-      <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~/Documents/Projects/Snarl<span class="pl-pds">"</span></span>
+      <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/user/repo<span class="pl-pds">"</span></span>,
+      <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>/home/user/local/git/repo<span class="pl-pds">"</span></span>,
+      <span class="pl-s1"><span class="pl-pds">"</span>deploy<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>git pull<span class="pl-pds">"</span></span>,
+      <span class="pl-s1"><span class="pl-pds">"</span>secret<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
     }
   ]
 }</pre></div>
 
-<p>If left blank, the <code>port</code> will default to 8001; and any repository options/properties which have been left out default to the following:</p>
+<ul>
+<li>
+<code>port</code>: if left blank will default to 8001.</li>
+<li>
+<code>log</code>: if removed/directory is left blank will default to the running directory. Note: directory must already exist
+or an error will be thrown.</li>
+<li>
+<code>repository</code>: any repository options/properties which have been left out default to the following:</li>
+</ul>
 
 <div class="highlight highlight-JSON"><pre>{
-  <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/hoxxep/Gookie<span class="pl-pds">"</span></span>,
-  <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~/Documents/Projects/Gookie<span class="pl-pds">"</span></span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/user/repo<span class="pl-pds">"</span></span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>/home/user/local/git/repo<span class="pl-pds">"</span></span>,
   <span class="pl-s1"><span class="pl-pds">"</span>deploy<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>git pull<span class="pl-pds">"</span></span>,
   <span class="pl-s1"><span class="pl-pds">"</span>secret<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
 }</pre></div>
 
-<p>This means if you don't have a custom <code>deploy</code> script/command, it will default to <code>git pull</code>, and the secret will default to blank.</p>
+<p>This means if you don't specify a custom <code>deploy</code> script/command, it will default to <code>git pull</code>, and the <code>secret</code> will default to blank. For example, the following repo set up will use <code>git pull</code> as its deploy script and have no secret.</p>
+
+<div class="highlight highlight-JSON"><pre>{
+  <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>https://github.com/you/repo<span class="pl-pds">"</span></span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>/home/user/your/git/repo<span class="pl-pds">"</span></span>
+}</pre></div>
 
 <h2>
 <a id="sample-output" class="anchor" href="#sample-output" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sample Output</h2>
@@ -126,21 +153,13 @@ Already up-to-date.
 <a id="todos" class="anchor" href="#todos" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODOs</h2>
 
 <ul>
-<li>Include support for multiple webhooks on the same repo and different actions for each
-
-<ul>
-<li>Would require unique urls for each hook/event as GitHub doesn't send what the event was in the payload. Will need to look at a neat way to do this in Express.js</li>
-</ul>
-</li>
-<li>Add a custom terminal message for ping event</li>
-<li>Add support for repo/webhook secret</li>
-<li>Daemon/service mode?</li>
+<li>Include support for multiple webhooks on the same repo and different actions for each. This would require unique urls for each hook/event as GitHub doesn't send what the event was in the payload. Will need to look at a neat way to do this in Express.js.</li>
+<li>Daemon/service mode? User can currently do a work around using the npm module <code>forever</code>, which might actually be cleaner than implementing daemon/service mode for Gookie on its own?</li>
 </ul>
 
 <hr>
 
-<p>Created by Liam Gray (<a href="https://github.com/hoxxep" class="user-mention">@hoxxep</a>).
-Released under the MIT License.</p>
+<p>Created by Liam Gray (<a href="https://github.com/hoxxep" class="user-mention">@hoxxep</a>). Released under the MIT License.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/hoxxep">hoxxep</a></p>
