@@ -60,7 +60,15 @@ function loadConfig() {
         ]
     };
 
-    var config = require('./config.json');
+    var config;
+
+    try {
+        config = require('./config.json');
+    } catch (e) {
+        console.log('ERROR: config.json not found! Copy config-example.json to config.json and configure Gookie there.');
+        throw e;
+    }
+
     config = merge(defaults, config);
 
     repos = {};
